@@ -84,7 +84,6 @@ end
 
 function love.keypressed(key)
   if key == 'space' then
-    print('coucou')
     grid:togglePause()
   end
 end
