@@ -91,6 +91,6 @@ function Enemy:draw()
   else
     love.graphics.setColor(255, 255, 255)
   end
-  love.graphics.draw(assets[self.type], self.x, self.y, 0, 1./64)
+  love.graphics.draw(assets[self.type], self.x-0.5, self.y-0.5, 0, 1./64)
   
 end

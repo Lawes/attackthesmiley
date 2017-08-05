@@ -142,10 +142,13 @@ end
 function Room:draw()
   love.graphics.push()
   love.graphics.translate(self.offset[1], self.offset[2])
-  love.graphics.scale(self.size[1]/self.ncells.x, self.size[2]/self.ncells.y)
+  love.graphics.scale(self.dx, self.dy)
   love.graphics.setLineWidth(0.1)
   local gx, gy, v
   love.graphics.setColor(255,255,255)
+  
+  love.graphics.draw(assets.bg1, 0, 0, 0, self.ncells.x/assets.bg1:getWidth(), self.ncells.y/assets.bg1:getHeight())
+  
 	for ix=0,self.ncells.x do
 		love.graphics.line(ix, 0, ix, self.ncells.y)
 	end
@@ -153,13 +156,15 @@ function Room:draw()
 	for ix=0,self.ncells.y do
 		love.graphics.line(0, ix, self.ncells.x, ix)
 	end
-
+  local dxwall, dywall = assets.bgwalls:getWidth()/self.ncells.x, assets.bgwalls:getHeight()/self.ncells.y
 	for ix = 0,self.ncells.x-1 do
 		for iy = 0, self.ncells.y-1 do
       v = self.grid.data[ix][iy]
 			if v == -1 then
-				love.graphics.setColor(250,10,10)
-				love.graphics.rectangle('fill',ix, iy, 1, 1)
+        local quad = love.graphics.newQuad(ix*dxwall, iy*dywall, dxwall, dywall, 
+                          assets.bgwalls:getWidth(), assets.bgwalls:getHeight())
+        love.graphics.setColor(255,255,255)
+        love.graphics.draw(assets.bgwalls, quad, ix, iy, 0, 1/dxwall, 1/dywall)
 			elseif v == 2 then
 				love.graphics.setColor(10,250,10)
 				love.graphics.rectangle('fill', ix, iy, 1, 1)			
