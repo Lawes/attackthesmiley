@@ -30,8 +30,8 @@ end
 
 
 function Tower:draw()
-  love.graphics.setColor(0, 0, 250)
-  love.graphics.circle('line', self.x, self.y, self.distance, 12)
+  love.graphics.setColor(unpack(self.color))
+  love.graphics.draw(assets[self.imgname], self.x, self.y, 0, 1./64)
 end
 
 Canon = Tower:extend()

@@ -17,6 +17,12 @@ function Room:new()
   self.MM = MissileManager()
   Gtimer = Timer.new()
   
+  self.allsmiley = {}
+  for k,v in pairs(G.smiley) do
+    self.allsmiley[#self.allsmiley+1] = k
+  end
+    
+  
 end
 
 function Room:togglePause()
@@ -125,7 +131,7 @@ function Room:update(dt)
   for _,s in pairs(self.spawners) do
     s:update(dt)
     repeat
-      local e = s:createEnemy()
+      local e = s:createEnemy(G.smiley[Lume.randomchoice(self.allsmiley)])
       self.EM:add(e)
 
     until(e == nil)

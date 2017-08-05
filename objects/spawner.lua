@@ -18,11 +18,12 @@ function Spawner:update(dt)
   if not self.isPaused then self.toCreate = self.toCreate + dt*self.rate end
 end
 
-function Spawner:createEnemy()
+function Spawner:createEnemy(einfo)
   if self.toCreate >= 1.0 then
     local x = self.x + 0.5*math.random()-0.25
     local y = self.y + 0.5*math.random() - 0.25
-    local e = Enemy(G.smiley.love)
+    
+    local e = Enemy(einfo)
     e:setPos(x, y)
     self.toCreate = self.toCreate -1.0
     return e

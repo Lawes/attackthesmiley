@@ -5,6 +5,8 @@ Timer = require 'lib/hump.timer'
 Signal = require 'lib/hump.signal'
 Lume = require 'lib/lume'
 
+assets = require('lib/cargo').init('assets')
+
 -- local profile = require("lib/profile")
 
 io.stdout:setvbuf("no")

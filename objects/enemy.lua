@@ -87,10 +87,10 @@ end
 
 function Enemy:draw()
   if self.isMarked then
-    love.graphics.setColor(10, 195, 10)
+    love.graphics.setColor(100, 100, 100)
   else
-    love.graphics.setColor(195, 195, 10)
+    love.graphics.setColor(255, 255, 255)
   end
-  love.graphics.circle("fill", self.x, self.y, 0.2, 10)
+  love.graphics.draw(assets[self.type], self.x, self.y, 0, 1./64)
   
 end
