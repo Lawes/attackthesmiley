@@ -4,6 +4,9 @@ Physics = require 'global/physics'
 
 
 function Room:new()
+  
+
+  
   self.isPaused = true
   
 	self.size = { 700, 500}
@@ -145,7 +148,7 @@ function Room:draw()
   love.graphics.scale(self.dx, self.dy)
   love.graphics.setLineWidth(0.1)
   local gx, gy, v
-  love.graphics.setColor(255,255,255)
+  love.graphics.setColor(100,100,100)
   
   love.graphics.draw(assets.bg1, 0, 0, 0, self.ncells.x/assets.bg1:getWidth(), self.ncells.y/assets.bg1:getHeight())
   
@@ -156,6 +159,7 @@ function Room:draw()
 	for ix=0,self.ncells.y do
 		love.graphics.line(0, ix, self.ncells.x, ix)
 	end
+
   local dxwall, dywall = assets.bgwalls:getWidth()/self.ncells.x, assets.bgwalls:getHeight()/self.ncells.y
 	for ix = 0,self.ncells.x-1 do
 		for iy = 0, self.ncells.y-1 do
@@ -171,6 +175,7 @@ function Room:draw()
 			end
 		end
 	end
+
   
   for _,s in pairs(self.spawners) do
     s:draw()
