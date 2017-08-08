@@ -3,14 +3,12 @@ Room = Object:extend()
 Physics = require 'global/physics'
 
 
-function Room:new()
-  
-
+function Room:new(x, y, w, h)
+  self.ncells = {x=1, y=1}
+  self:setSize(w, h)
+  self:setOffset(x, y)
   
   self.isPaused = true
-  
-	self.size = { 700, 500}
-	self.offset = {40,200}
 
   self.spawners = {}
   self.factors = {wall=10.0, body=5.0}
@@ -89,28 +87,27 @@ function Room:updateIA()
 end
 
 function Room:setSize(wx, wy)
-	self.size = {wx, wy}
+	self.size = {x=wx, y=wy}
 	self:updateDxDy()
 end
 
 function Room:setOffset(x, y)
-	self.offset = {x,y}
-	self:updateDxDy()
+	self.offset = {x=x,y=y}
 end
 
 function Room:updateDxDy()
-	self.dx = self.size[1]/self.ncells.x
-	self.dy = self.size[2]/self.ncells.y
+	self.dx = self.size.x/self.ncells.x
+	self.dy = self.size.y/self.ncells.y
 end
 
 function Room:xy2cell(x, y)
-	local cx = math.max(math.min(math.floor((x - self.offset[1])/self.dx), self.ncells.x-1),0)
-	local cy = math.max(math.min(math.floor((y - self.offset[2])/self.dy), self.ncells.y-1),0)
+	local cx = math.max(math.min(math.floor((x - self.offset.x)/self.dx), self.ncells.x-1),0)
+	local cy = math.max(math.min(math.floor((y - self.offset.y)/self.dy), self.ncells.y-1),0)
 	return cx, cy
 end
 
 function Room:cell2xy(cx, cy)
-  return cx*self.dx + self.offset[1], cy*self.dy+self.offset[2]
+  return cx*self.dx + self.offset.x, cy*self.dy+self.offset.y
 end
 
 function Room:getGrid()
@@ -144,7 +141,7 @@ end
 
 function Room:draw()
   love.graphics.push()
-  love.graphics.translate(self.offset[1], self.offset[2])
+  love.graphics.translate(self.offset.x, self.offset.y)
   love.graphics.scale(self.dx, self.dy)
   love.graphics.setLineWidth(0.1)
   local gx, gy, v

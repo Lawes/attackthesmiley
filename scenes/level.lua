@@ -19,7 +19,7 @@ local function attachTowerToRoom(room)
 end
 
 function level:enter()
-  self.room = Room()
+  self.room = Room(40, 200, 700, 500)
   attachTowerToRoom(self.room)
   
   self.room:fromConfig(G.lvl.level1)
@@ -38,19 +38,37 @@ end
 
 function level:mousepressed(x, y, button, istouch)
   local ix, iy
-  ix, iy = self.room:xy2cell(x,y)
-	if button == 1 then
-    self.room:getGrid():setWall(ix, iy)
-  elseif button == 2 then
-    self.room:addTower(ix, iy, "Canon")
+  
+  if suit.mouseInRect(self.room.offset.x, self.room.offset.y, self.room.size.x, self.room.size.y) then
+    ix, iy = self.room:xy2cell(x,y)
+    if button == 1 then
+      self.room:getGrid():setWall(ix, iy)
+    elseif button == 2 then
+      self.room:addTower(ix, iy, "Canon")
+    end
+    self.room:updateIA()  
   end
-  self.room:updateIA()  
+  
 end
 
 function level:update(dt)
   
   suit.layout:reset(40, 700)
+  suit.layout:padding(5,5)
   suit.Button('coucou', suit.layout:row(200,30))
+  local handles = { 
+    canon=suit.ImageButton(assets.towers_c, suit.layout:col(64,64)),
+    laser=suit.ImageButton(assets.towers_l, suit.layout:col()),
+    nuclear=suit.ImageButton(assets.towers_n, suit.layout:col()),
+    freezer=suit.ImageButton(assets.towers_f, suit.layout:col()),
+    boost=suit.ImageButton(assets.towers_b, suit.layout:col()),
+    crusher=suit.ImageButton(assets.towers_r, suit.layout:col())}
+  
+  for k,h in pairs(handles) do
+    if h.entered then
+      print('hit',k)
+    end
+  end
   
   
   
