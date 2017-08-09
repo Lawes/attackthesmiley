@@ -45,5 +45,7 @@ M.Crusher.reload = 0.5
 M.Crusher.imgname = "towers_r"
 M.Crusher.color = {10,200,200}
 
+M.Wall = {}
+M.Wall.imgname = "wall2"
 
 return M

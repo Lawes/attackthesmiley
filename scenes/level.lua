@@ -19,6 +19,8 @@ local function attachTowerToRoom(room)
 end
 
 function level:enter()
+  self.ui_select=nil
+  
   self.room = Room(40, 200, 700, 500)
   attachTowerToRoom(self.room)
   
@@ -36,6 +38,18 @@ function level:keypressed(key)
   
 end
 
+function level:mousemoved( x, y, dx, dy, istouch) 
+  if suit.mouseInRect(self.room.offset.x, self.room.offset.y, self.room.size.x, self.room.size.y) then
+	if self.ui_select then
+	    local ix, iy = self.room:xy2cell(x,y)
+		self.plot_select = {img=assets[G.tower[self.ui_select].imgname], x=ix, y=iy, color={0,255,0}}
+	end
+  else
+	self.plot_select = nil
+  end
+
+end
+
 function level:mousepressed(x, y, button, istouch)
   local ix, iy
   
@@ -51,21 +65,34 @@ function level:mousepressed(x, y, button, istouch)
   
 end
 
+local function mydraw(isSelectd, img, x, y)
+	return function(img, x, y)
+		love.graphics.setColor(255, 255, 255)
+		love.graphics.draw(img,x,y)
+		love.graphics.setLineWidth(5)
+		if isSelectd then
+		  love.graphics.setColor(255,0,0)
+		end
+		love.graphics.rectangle('line', x, y, img:getWidth(), img:getHeight())
+	end
+end
+
 function level:update(dt)
+  love.graphics.setColor(255,255,255)
+  suit.layout:reset(40, 730)
+  suit.layout:padding(10)
+  if suit.Button('reset', suit.layout:row(100,30)).hit then
+	self.ui_select=nil
+  end
   
-  suit.layout:reset(40, 700)
-  suit.layout:padding(5,5)
-  suit.Button('coucou', suit.layout:row(200,30))
-  local handles = { 
-    canon=suit.ImageButton(assets.towers_c, suit.layout:col(64,64)),
-    laser=suit.ImageButton(assets.towers_l, suit.layout:col()),
-    nuclear=suit.ImageButton(assets.towers_n, suit.layout:col()),
-    freezer=suit.ImageButton(assets.towers_f, suit.layout:col()),
-    boost=suit.ImageButton(assets.towers_b, suit.layout:col()),
-    crusher=suit.ImageButton(assets.towers_r, suit.layout:col())}
+  local handles = {}
+  for k,w in pairs(G.tower) do
+	handles[k] = suit.ImageButton(assets[w.imgname.."_g"], {active=assets[w.imgname], draw=mydraw(self.ui_select==k)}, suit.layout:col(64,64))
+  end
   
   for k,h in pairs(handles) do
-    if h.entered then
+    if h.hit then
+      self.ui_select=k	  
       print('hit',k)
     end
   end
@@ -78,7 +105,12 @@ end
 function level:draw()
   love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
   GS:draw()
-	self.room:draw()  
+  if self.plot_select then
+    self.room:addtodraw(self.plot_select)
+  end
+  self.room:draw()  
+
+	
   suit.draw()
 end
 

@@ -139,6 +139,10 @@ function Room:update(dt)
   
 end
 
+function Room:addtodraw(info)
+  self.todraw = info
+end
+
 function Room:draw()
   love.graphics.push()
   love.graphics.translate(self.offset.x, self.offset.y)
@@ -186,6 +190,13 @@ function Room:draw()
   self.MM:draw()
   
   self.ia:draw()
+  
+  if self.todraw then
+	love.graphics.setColor(unpack(self.todraw.color))
+	local img=self.todraw.img
+	love.graphics.draw(img, self.todraw.x, self.todraw.y, 0, 1/img:getWidth(), 1/img:getHeight())
+	self.todraw = nil
+  end
   
   -- self.tower:draw()
   
