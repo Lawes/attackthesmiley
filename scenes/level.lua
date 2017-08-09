@@ -40,10 +40,14 @@ end
 
 function level:mousemoved( x, y, dx, dy, istouch) 
   if suit.mouseInRect(self.room.offset.x, self.room.offset.y, self.room.size.x, self.room.size.y) then
-	if self.ui_select then
-	    local ix, iy = self.room:xy2cell(x,y)
-		self.plot_select = {img=assets[G.tower[self.ui_select].imgname], x=ix, y=iy, color={0,255,0}}
-	end
+    if self.ui_select then
+      local ix, iy = self.room:xy2cell(x,y)
+      local color = {0,255,0}
+      if self.room.grid:isFree(ix, iy) then
+        color = {0,0,255}
+      end
+      self.plot_select = {img=assets[G.tower[self.ui_select].imgname], x=ix, y=iy, color=color}
+    end
   else
 	self.plot_select = nil
   end
@@ -65,14 +69,12 @@ function level:mousepressed(x, y, button, istouch)
   
 end
 
-local function mydraw(isSelectd, img, x, y)
+local function mydraw(r, g, b, img, x, y)
 	return function(img, x, y)
 		love.graphics.setColor(255, 255, 255)
 		love.graphics.draw(img,x,y)
 		love.graphics.setLineWidth(5)
-		if isSelectd then
-		  love.graphics.setColor(255,0,0)
-		end
+    love.graphics.setColor(r,g,b)
 		love.graphics.rectangle('line', x, y, img:getWidth(), img:getHeight())
 	end
 end
@@ -87,7 +89,12 @@ function level:update(dt)
   
   local handles = {}
   for k,w in pairs(G.tower) do
-	handles[k] = suit.ImageButton(assets[w.imgname.."_g"], {active=assets[w.imgname], draw=mydraw(self.ui_select==k)}, suit.layout:col(64,64))
+    local color = {255,255,255}
+    if self.ui_select==k then
+      color = {255,0,0}
+    end
+      
+    handles[k] = suit.ImageButton(assets[w.imgname.."_g"], {active=assets[w.imgname], draw=mydraw(unpack(color))}, suit.layout:col(64,64))
   end
   
   for k,h in pairs(handles) do
