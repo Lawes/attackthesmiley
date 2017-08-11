@@ -39,32 +39,18 @@ function level:keypressed(key)
 end
 
 function level:mousemoved( x, y, dx, dy, istouch) 
-  if suit.mouseInRect(self.room.offset.x, self.room.offset.y, self.room.size.x, self.room.size.y) then
-    if self.ui_select then
-      local ix, iy = self.room:xy2cell(x,y)
-      local color = {0,255,0}
-      if self.room.grid:isFree(ix, iy) then
-        color = {0,0,255}
-      end
-      self.plot_select = {img=assets[G.tower[self.ui_select].imgname], x=ix, y=iy, color=color}
-    end
-  else
-	self.plot_select = nil
-  end
 
 end
 
 function level:mousepressed(x, y, button, istouch)
-  local ix, iy
-  
-  if suit.mouseInRect(self.room.offset.x, self.room.offset.y, self.room.size.x, self.room.size.y) then
-    ix, iy = self.room:xy2cell(x,y)
-    if button == 1 then
-      self.room:getGrid():setWall(ix, iy)
-    elseif button == 2 then
-      self.room:addTower(ix, iy, "Canon")
-    end
-    self.room:updateIA()  
+  if suit.mouseInRect(self.room.offset.x, self.room.offset.y, self.room.size.x, self.room.size.y)
+     and button == 1 then
+    local ix, iy = self.room:xy2cell(x,y)
+	if self.room:isFree(ix, iy) then
+	  print('build',self.ui_select)
+	  self.room:putBuilding(ix, iy, self.ui_select or 'Wall')
+      self.room:updateIA()  
+	end
   end
   
 end
@@ -106,7 +92,22 @@ function level:update(dt)
   
   
   
-  self.room:update(dt)  
+  self.room:update(dt)
+  
+  if suit.mouseInRect(self.room.offset.x, self.room.offset.y, self.room.size.x, self.room.size.y) then
+    if self.ui_select then
+	
+      local ix, iy = self.room:xy2cell(love.mouse.getPosition())
+      local color = {0,255,0}
+      if self.room:isFree(ix, iy) then
+        color = {0,0,255}
+      end
+      self.plot_select = {img=assets[G.tower[self.ui_select].imgname], x=ix, y=iy, color=color}
+    end
+  else
+	self.plot_select = nil
+  end
+  
 end
 
 function level:draw()

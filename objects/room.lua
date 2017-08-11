@@ -66,15 +66,15 @@ function Room:fromConfig(lvl)
   
 end
 
-function Room:addTower(ix, iy, typeof)
-  if self.grid:isFree(ix, iy) then
-    local tower = _G[typeof](ix, iy)
+function Room:putBuilding(ix, iy, typeof)
+  if typeof == 'Wall' then
+    self.grid:setWall(ix, iy)
+  else
+    local tower = _G['Canon'](ix, iy)
     tower:start()
     table.insert(self.towers, tower)
     self.grid:setTower(ix, iy)
   end
-    
-  
 end
 
 function Room:clear()
@@ -112,6 +112,10 @@ end
 
 function Room:getGrid()
   return self.grid
+end
+
+function Room:isFree(ix, iy)
+  return (self.ia:howMany(ix, iy) == 0) and self.grid:isFree(ix, iy)
 end
 
 function Room:update(dt)

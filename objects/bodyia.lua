@@ -38,6 +38,13 @@ function BodyIA:clearBodyCache()
   end
 end
 
+function BodyIA:howMany(ix, iy)
+
+  return #self.body[ix][iy] or 0
+
+  
+end
+
 function BodyIA:randomBody()
   return math.random(self.nbody)
 end
