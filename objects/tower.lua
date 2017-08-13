@@ -53,3 +53,23 @@ function Canon:shot()
     )
   end
 end
+
+Blaster = Tower:extend()
+
+function Blaster:new(x, y)
+  Blaster.super.new(self, x, y, Blaster.params)
+end
+
+function Blaster:shot()
+  local cible = self.getCible(
+    self.x, self.y,
+    self.distance)
+  if cible then
+    Signal.emit(
+      "missile.add",
+      Laser({x=self.x, y=self.y}, cible, self.dps, self.distance, self.reload)
+    )
+  end
+  
+end
+

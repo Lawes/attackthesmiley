@@ -2,20 +2,22 @@
 local M = {}
 
 M.Canon = {}
-M.Canon.dmg = 200
+M.Canon.dmg = 100
 M.Canon.reload = .1
 M.Canon.distance = 3.0
 M.Canon.nbfocus = 5
 M.Canon.color = {200,10,10}
 M.Canon.imgname = "towers_c"
-M.Canon.getCible_ = function(ia, x, y) return ia:randomBody() end
+-- M.Canon.getCible_ = function(ia, x, y) return ia:randomBody() end
+M.Canon.getCible_ = function(ia, x, y) return ia:randomBodyAtDistance(x, y, M.Blaster.distance) end
 
-M.Laser = {}
-M.Laser.dps = 50.0
-M.Laser.distance = 4.0
-M.Laser.reload = 1.0
-M.Laser.imgname = "towers_l"
-M.Laser.color = {10,200,10}
+M.Blaster = {}
+M.Blaster.dps = 100.0
+M.Blaster.distance = 4.0
+M.Blaster.reload = 3.0
+M.Blaster.imgname = "towers_l"
+M.Blaster.color = {10,200,80}
+M.Blaster.getCible_ = function(ia, x, y) return ia:randomBodyAtDistance(x, y, M.Blaster.distance) end
 
 M.Nuclear = {}
 M.Nuclear.dmg = 10.0

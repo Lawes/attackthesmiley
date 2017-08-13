@@ -52,7 +52,7 @@ end
 function GameStats:draw()  
   love.graphics.setColor(200,200,200)
   love.graphics.print("Cash: "..tostring(self.playercash), 10, 50)
-  love.graphics.print("Pvin Game: "..tostring(self.totalpv), 10, 70)  
+  love.graphics.print("Pvin Game: "..tostring(math.floor(self.totalpv)), 10, 70)  
   
   
 end

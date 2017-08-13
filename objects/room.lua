@@ -70,7 +70,9 @@ function Room:putBuilding(ix, iy, typeof)
   if typeof == 'Wall' then
     self.grid:setWall(ix, iy)
   else
-    local tower = _G['Canon'](ix, iy)
+    local tmp = (typeof == 'Canon' or typeof == 'Blaster') and typeof or 'Canon'
+    
+    local tower = _G[tmp](ix, iy)
     tower:start()
     table.insert(self.towers, tower)
     self.grid:setTower(ix, iy)
@@ -123,9 +125,10 @@ function Room:update(dt)
     return
   end
   
+  self.ia:setBody(self.EM.allEnemies)
   Gtimer:update(dt)
   
-  self.ia:setBody(self.EM.allEnemies)
+  
   Physics.applyBodyForce(self.EM.allEnemies, self.ia, self.factors.body)
   Physics.applyWallForce(self.EM.allEnemies, self.grid, self.factors.wall)
   

@@ -6,7 +6,7 @@ local function attachTowerToRoom(room)
     print(name)
     if class.getCible_ then
       class.getCible = function(...) 
-        local ie = class.getCible_(room.ia, unpack(arg))
+        local ie = class.getCible_(room.ia, ...)
         return room.EM:get(ie)
       end
     end

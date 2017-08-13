@@ -25,13 +25,13 @@ end
 function Enemy:hit(dmg)
   local dpv = self.life - dmg
   if dpv <= 0 then
-    dpv = self.life
+    dmg = self.life
     self.life = 0
     self:dead()
   else
     self.life = dpv
   end
-  Signal.emit("smiley.hit", dpv)
+  Signal.emit("smiley.hit", dmg)
 end
 
 function Enemy:dead()

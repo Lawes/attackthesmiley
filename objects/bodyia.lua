@@ -49,6 +49,12 @@ function BodyIA:randomBody()
   return math.random(self.nbody)
 end
 
+function BodyIA:randomBodyAtDistance(x, y, d)
+  return Lume.randomchoice(self:getBodyNearBy(x, y, math.ceil(d)))
+  
+end
+
+
 function BodyIA:setBody(allbody)
   self:clearBodyCache()
   self.nbody = #allbody
