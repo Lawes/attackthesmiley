@@ -9,6 +9,10 @@ local function attachTowerToRoom(room)
         local ie = class.getCible_(room.ia, ...)
         return room.EM:get(ie)
       end
+    elseif class.getCibleXY_ then
+      class.getCible = function(...) 
+        return class.getCibleXY_(room.ia, ...)
+      end      
     end
     if _G[name] then
       _G[name].params = class

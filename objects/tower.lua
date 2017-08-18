@@ -42,10 +42,7 @@ function Canon:new(x, y)
 end
 
 function Canon:shot()
-  local cible = self.getCible(
-    self.x,
-    self.y,
-    self.distance)
+  local cible = self.getCible(self.x, self.y)
   if cible then
     Signal.emit(
       "missile.add", 
@@ -61,15 +58,39 @@ function Blaster:new(x, y)
 end
 
 function Blaster:shot()
-  local cible = self.getCible(
-    self.x, self.y,
-    self.distance)
+  local cible = self.getCible(self.x, self.y)
   if cible then
     Signal.emit(
       "missile.add",
       Laser({x=self.x, y=self.y}, cible, self.dps, self.distance, self.reload)
     )
   end
-  
 end
 
+Nuclear = Tower:extend()
+
+function Nuclear:new(x, y)
+  Nuclear.super.new(self, x, y, Nuclear.params)
+end
+
+function Nuclear:shot()
+  local ciblexy = self.getCible(self.x, self.y)
+  if ciblexy then
+    Signal.emit(
+      "missile.add",
+      Bomb({x=self.x, y=self.y}, ciblexy, self.dmg, self.radiusEffect))
+  end
+end
+
+Crusher = Tower:extend()
+function Crusher:new(x, y)
+  Crusher.super.new(self, x, y, Crusher.params)
+end
+
+function Crusher:shot()
+  local ciblexy = self.getCible(self.x, self.y)
+  if ciblexy then
+    Signal.emit('missile.explosion', ciblexy, self.radiusEffect, self.dmg)
+    Signal.emit('missile.add', Explosion(ciblexy, self.radiusEffect, 0.1))
+  end
+end

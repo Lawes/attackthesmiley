@@ -22,7 +22,17 @@ function Room:new(x, y, w, h)
   for k,v in pairs(G.smiley) do
     self.allsmiley[#self.allsmiley+1] = k
   end
-    
+  
+  Signal.register('missile.explosion', 
+    function(pos, radius, dmg)
+      for _, ie in ipairs(self.ia:getBodyNearBy(pos.x, pos.y, radius))
+      do
+        local e = self.EM:get(ie)
+        e:hit(dmg)
+      end
+    end
+  )
+  
   
 end
 
@@ -70,7 +80,7 @@ function Room:putBuilding(ix, iy, typeof)
   if typeof == 'Wall' then
     self.grid:setWall(ix, iy)
   else
-    local tmp = (typeof == 'Canon' or typeof == 'Blaster') and typeof or 'Canon'
+    local tmp = (typeof == 'Canon' or typeof == 'Blaster' or typeof == 'Nuclear' or typeof == 'Crusher') and typeof or 'Canon'
     
     local tower = _G[tmp](ix, iy)
     tower:start()

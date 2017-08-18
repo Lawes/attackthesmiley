@@ -51,8 +51,31 @@ end
 
 function BodyIA:randomBodyAtDistance(x, y, d)
   return Lume.randomchoice(self:getBodyNearBy(x, y, math.ceil(d)))
-  
 end
+
+function BodyIA:getMaxDensity(x, y, d)
+  local ix, iy = floor(x), floor(y)
+  local maxNbr, maxPos = 0, nil
+  for dx=-d,d do
+    local gx = self.body[ix+dx]
+    if gx then
+      for dy=-d,d do
+        if gx[iy+dy] then
+          local nbodyInCell = #gx[iy+dy]
+
+          if nbodyInCell > maxNbr then
+            maxNbr = nbodyInCell
+            maxPos = {x=ix+dx, y=iy+dy}
+          end
+        end
+        
+        
+      end
+    end
+  end
+  return maxPos
+end
+
 
 
 function BodyIA:setBody(allbody)
