@@ -21,6 +21,7 @@ local function loadConfigs()
   G.smiley = require('global/enemy_config')
   G.tower = require('global/tower_config')
   G.lvl = require('global/level_config')
+  G.wave = require('global/wave_config')
 end
 
 

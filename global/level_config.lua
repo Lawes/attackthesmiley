@@ -13,7 +13,7 @@ for iy=0,M.level1.ncells.y-1 do
 end
 
 M.level1.exits = { {15, 5}, {15,15}}
-M.level1.spawners = {{1,10}}
+M.level1.spawners = {} -- {{1,10}}
 
 return M
   

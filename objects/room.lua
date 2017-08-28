@@ -77,6 +77,9 @@ function Room:fromConfig(lvl)
     s:togglePause()
     table.insert(self.spawners, s)
   end
+  local ws = WaveSpawner(5,5,4,2, G.wave.wave)
+  ws:togglePause()
+  table.insert(self.spawners, ws)
 
   self:updateDxDy()
   

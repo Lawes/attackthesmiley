@@ -1,9 +1,24 @@
 Enemy = Object:extend()
 
-function Enemy:new(params)
+function Enemy:new(name, lvl)
+  
+  local params = G.smiley[name]
+  
+  local plvl = lvl or 1
+  self.lvl = plvl
+
+  
+      
   for k,v in pairs(params) do
     self[k]= v
   end
+  if params.lvlup then
+    while plvl > 1 do
+      params.lvlup(self)
+      plvl = plvl -1
+    end
+  end
+  print(self.life)
 
   
   self.life = 200

@@ -24,7 +24,7 @@ end
 
 function GameStats:deadSmiley(e)
   -- self.totalpv = self.totalpv - G.conf_smiley[e.type].life
-  self.smileyInGame[e.type] = self.smileyInGame[e.type] - 1
+  -- self.smileyInGame[e.type] = self.smileyInGame[e.type] - 1
   self.huntingTable[e.type] = self.huntingTable[e.type] + 1
   self.playercash = self.playercash + G.smiley[e.type].reward
 end
@@ -52,7 +52,13 @@ end
 function GameStats:draw()  
   love.graphics.setColor(200,200,200)
   love.graphics.print("Cash: "..tostring(self.playercash), 10, 50)
-  love.graphics.print("Pvin Game: "..tostring(math.floor(self.totalpv)), 10, 70)  
+  love.graphics.print("Pvin Game: "..tostring(math.floor(self.totalpv)), 10, 70) 
+  local i=1
+  for name, c in pairs(self.smileyInGame) do
+    love.graphics.print(name..' : '..tostring(c), 10, 70+i*15)
+    i = i+1
+  end
+  
   
   
 end
