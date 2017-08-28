@@ -94,3 +94,18 @@ function Crusher:shot()
     Signal.emit('missile.add', Explosion(ciblexy, self.radiusEffect, 0.1))
   end
 end
+
+Freezer = Tower:extend()
+
+function Freezer:new(x, y)
+    Freezer.super.new(self, x, y, Freezer.params)
+end
+
+function Freezer:shot()
+  local ciblexy = self.getCible(self.x, self.y)
+  if ciblexy then
+    Signal.emit('missile.add',
+      FreezeBomb({x=self.x, y=self.y}, ciblexy, self.speedReduction, self.radiusEffect))
+  end
+end
+

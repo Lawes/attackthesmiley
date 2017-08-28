@@ -8,7 +8,6 @@ M.Canon.distance = 3.0
 M.Canon.nbfocus = 5
 M.Canon.color = {200,10,10}
 M.Canon.imgname = "towers_c"
--- M.Canon.getCible_ = function(ia, x, y) return ia:randomBody() end
 M.Canon.getCible_ = function(ia, x, y) return ia:randomBodyAtDistance(x, y, M.Canon.distance) end
 
 M.Blaster = {}
@@ -29,12 +28,13 @@ M.Nuclear.color = {10,10,200}
 M.Nuclear.getCibleXY_ = function(ia, x, y) return ia:getMaxDensity(x, y, M.Nuclear.distance) end
 
 M.Freezer = {}
-M.Freezer.distance = 2.0
+M.Freezer.distance = 6.0
 M.Freezer.radiusEffect = 1.0
-M.Freezer.reload = 2.0
-M.Freezer.speedReduction = 0.8
+M.Freezer.reload = 3.0
+M.Freezer.speedReduction = 80
 M.Freezer.imgname = "towers_f"
 M.Freezer.color = {200,10,200}
+M.Freezer.getCibleXY_ = function(ia, x, y) return ia:getMaxDensity(x, y, M.Freezer.distance) end
 
 M.Booster = {}
 M.Booster.power = 1.1
