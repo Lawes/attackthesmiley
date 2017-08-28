@@ -33,6 +33,16 @@ function Room:new(x, y, w, h)
     end
   )
   
+  Signal.register('missile.blizzard',
+    function(pos, radius, ratio)
+      for _, ie in ipairs(self.ia:getBodyNearBy(pos.x, pos.y, radius))
+      do
+        local e = self.EM:get(ie)
+        e:freeze(ratio)
+      end
+    end
+  )    
+  
   
 end
 
@@ -80,7 +90,7 @@ function Room:putBuilding(ix, iy, typeof)
   if typeof == 'Wall' then
     self.grid:setWall(ix, iy)
   else
-    local tmp = (typeof == 'Canon' or typeof == 'Blaster' or typeof == 'Nuclear' or typeof == 'Crusher') and typeof or 'Canon'
+    local tmp = typeof == 'Booster' and 'Canon' or typeof
     
     local tower = _G[tmp](ix, iy)
     tower:start()
@@ -142,8 +152,10 @@ function Room:update(dt)
   Physics.applyBodyForce(self.EM.allEnemies, self.ia, self.factors.body)
   Physics.applyWallForce(self.EM.allEnemies, self.grid, self.factors.wall)
   
-  self.EM:update(dt, self.grid, self.ia)
+
   self.MM:update(dt)
+  self.EM:update(dt, self.grid, self.ia)
+  
   
   for _,s in pairs(self.spawners) do
     s:update(dt)

@@ -18,6 +18,8 @@ function Enemy:new(params)
   self.isMarked=false
   self.isDead = false
   
+  self.freezeratio = 0
+  
   self:resetForce()
   self:static()
 end
@@ -81,9 +83,18 @@ end
 
 function Enemy:update(dt)
   self.oldPos = {x=self.x, y=self.y}
-  self.x = self.x + dt * (self.vx + self.force.x*dt)
-  self.y = self.y + dt * (self.vy + self.force.y*dt)
+  local slow = (100.0-self.freezeratio)/100.0
+  self.x = self.x + dt * (slow * self.vx + self.force.x*dt)
+  self.y = self.y + dt * (slow * self.vy + self.force.y*dt)
 end
+
+function Enemy:freeze(s)
+  if self.freezeratio < s then
+    self.freezeratio = s
+    Gtimer:after(2, function() if self then self.freezeratio = 0 end end)
+  end
+end
+
 
 function Enemy:draw()
   if self.isMarked then
