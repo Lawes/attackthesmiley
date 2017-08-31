@@ -5,12 +5,14 @@ EnemyManager = Object:extend()
 function EnemyManager:new()
   self.allEnemies = {}
 
+  Signal.register('smiley.add', function(e) self:add(e) end)
+
 end
 
 function EnemyManager:add(enemy)
   if enemy then 
     table.insert(self.allEnemies, enemy)
-    Signal.emit('smiley.add', enemy)
+    -- Signal.emit('smiley.add', enemy)
   end
 end
 

@@ -77,7 +77,7 @@ function Room:fromConfig(lvl)
     s:togglePause()
     table.insert(self.spawners, s)
   end
-  local ws = WaveSpawner(5,5,4,2, G.wave.wave)
+  local ws = WaveSpawner(1,1,1,17, G.wave.wave)
   ws:togglePause()
   table.insert(self.spawners, ws)
 
@@ -164,7 +164,11 @@ function Room:update(dt)
     s:update(dt)
     repeat
       local e = s:createEnemy(G.smiley[Lume.randomchoice(self.allsmiley)])
-      self.EM:add(e)
+      if e then
+        Signal.emit('smiley.add', e)
+      end
+      
+      -- self.EM:add(e)
 
     until(e == nil)
   end

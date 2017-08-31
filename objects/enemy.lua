@@ -20,13 +20,11 @@ function Enemy:new(name, lvl)
   end
   print(self.life)
 
-  
-  self.life = 200
   self.x = 0
   self.y = 0
   self.vx = 0
   self.vy = 0
-  self.vref = math.random()*0.5+0.5
+  self.vref = self.speed*(1.0+math.random()*0.1)
   
   self.oldPos={x=0, y=0}
   
@@ -45,6 +43,12 @@ function Enemy:hit(dmg)
     dmg = self.life
     self.life = 0
     self:dead()
+    if self.lvl > 1 then
+      Signal.emit("smiley.add", 
+                  Enemy(self.type, self.lvl-1):setPos(self.x, self.y))
+      Signal.emit("smiley.add", 
+                  Enemy(self.type, self.lvl-1):setPos(self.x, self.y))
+    end
   else
     self.life = dpv
   end
@@ -54,6 +58,8 @@ end
 function Enemy:dead()
   self.isDead = true
   Signal.emit("smiley.dead", self)
+
+  
 end
 
 function Enemy:resetForce()
@@ -85,6 +91,7 @@ end
 
 function Enemy:setPos(x, y)
   self.x, self.y = x, y
+  return self
 end
 
 function Enemy:getPos()
@@ -112,11 +119,25 @@ end
 
 
 function Enemy:draw()
+  local r = 0.15*(1+self.lvl)
+  local lvlcolor
+  local rb = r*1.2
+  
   if self.isMarked then
     love.graphics.setColor(100, 100, 100)
   else
     love.graphics.setColor(255, 255, 255)
   end
-  love.graphics.draw(assets[self.type], self.x-0.5, self.y-0.5, 0, 1./64)
-  
+  love.graphics.draw(assets[self.type], self.x-r, self.y-r, 0, 2*r/64)
+
+  if self.freezeratio > 0 then
+    lvlcolor=255-40*self.lvl
+    love.graphics.setColor(10, lvlcolor, lvlcolor)
+  else
+    lvlcolor=255-70*self.lvl
+    love.graphics.setColor(lvlcolor, lvlcolor, lvlcolor)
+  end
+  love.graphics.draw(assets.smiley_border, self.x-rb, self.y-rb, 0, 2*rb/32) 
+
+
 end
