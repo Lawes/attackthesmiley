@@ -8,6 +8,7 @@ M.wave.smiley = {
   horror = {1, 1, 1}
 }
 M.wave.rate = 10.0
+M.wave.nbr = 3
   
 
 

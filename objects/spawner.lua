@@ -22,8 +22,7 @@ function Spawner:createEnemy(einfo)
     local x = self.x + 0.5*math.random()-0.25
     local y = self.y + 0.5*math.random() - 0.25
     
-    local e = Enemy(einfo)
-    e:setPos(x, y)
+    local e = Enemy(einfo):setPos(x, y)
     self.toCreate = self.toCreate -1.0
     return e
   end
@@ -58,15 +57,21 @@ end
 function WaveSpawner:new(x, y, w, h, wavecfg)
   self.x, self.y = x, y
   self.w, self.h = w, h
-  
-  self.wave = Lume.shuffle(genListToCreate(wavecfg.smiley))
-  
+  self.all = genListToCreate(wavecfg.smiley)
   self.rate = wavecfg.rate
-  
-  self.toCreate = 0.0
   self.isPaused = true
-  self.isFinished = false
+  
+  self:reload()
+  
 end
+
+function WaveSpawner:reload()
+  print('reload')
+  self.wave = Lume.shuffle(self.all)
+  self.toCreate = 0.0
+  self.isFinished = false  
+end
+
 
 function WaveSpawner:togglePause()
   self.isPaused = not self.isPaused
@@ -77,8 +82,12 @@ function WaveSpawner:update(dt)
 end
 
 function WaveSpawner:createEnemy()
-  if #self.wave == 0 then
+  if #self.wave == 0 and not self.isFinished then
     self.isFinished = true
+    print('Ask for reload')
+    Gtimer:after(10, function() 
+        self:reload() 
+      end)
   end
   
   if self.toCreate >= 1.0 and not self.isFinished then
@@ -87,8 +96,7 @@ function WaveSpawner:createEnemy()
     local tmp = self.wave[#self.wave]
     self.wave[#self.wave] = nil
     print('Create', tmp[1], tmp[2])
-    local e = Enemy(tmp[1], tmp[2])
-    e:setPos(x, y)
+    local e = Enemy(tmp[1], tmp[2]):setPos(x, y)
     self.toCreate = self.toCreate -1.0
     return e
   end

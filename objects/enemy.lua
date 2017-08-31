@@ -6,9 +6,7 @@ function Enemy:new(name, lvl)
   
   local plvl = lvl or 1
   self.lvl = plvl
-
-  
-      
+ 
   for k,v in pairs(params) do
     self[k]= v
   end
@@ -18,7 +16,6 @@ function Enemy:new(name, lvl)
       plvl = plvl -1
     end
   end
-  print(self.life)
 
   self.x = 0
   self.y = 0
@@ -58,8 +55,6 @@ end
 function Enemy:dead()
   self.isDead = true
   Signal.emit("smiley.dead", self)
-
-  
 end
 
 function Enemy:resetForce()
