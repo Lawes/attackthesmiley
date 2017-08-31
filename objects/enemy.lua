@@ -107,8 +107,12 @@ end
 
 function Enemy:freeze(s)
   if self.freezeratio < s then
-    self.freezeratio = s
-    Gtimer:after(2, function() if self then self.freezeratio = 0 end end)
+    -- self.freezeratio = s
+    -- Gtimer:after(2, function() if self then self.freezeratio = 0 end end)
+    Gtimer:tween(1, self, {freezeratio=s}, 'out-expo', 
+      function()    
+      Gtimer:tween(1, self, {freezeratio=0}, 'in-expo' ) 
+    end)    
   end
 end
 
