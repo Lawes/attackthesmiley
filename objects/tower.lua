@@ -4,15 +4,28 @@ Tower = Object:extend()
 
 function Tower:new(x, y, params)
   self.isPaused = true
+  self.lvl = 1
   
   self.x, self.y = x, y
   for k,v in pairs(params) do
     self[k] = v
   end
-  
   self.shotAction = nil
 
 end
+
+function Tower:lvlup()
+  if not self.isPaused then    
+    self:stop()
+    Gimer:after(5, function()
+        self:start()
+        self.lvl = self.lvl+1
+        self.upgrade(self)
+        end)
+  end
+  
+end
+
 
 function Tower:start()
   self:stop()
@@ -26,8 +39,6 @@ function Tower:stop()
     Gtimer:cancel(self.shotAction)
   end
 end
-  
-
 
 function Tower:draw()
   love.graphics.setColor(unpack(self.color))
