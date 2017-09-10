@@ -143,6 +143,13 @@ function Room:isFree(ix, iy)
   return (self.ia:howMany(ix, iy) == 0) and self.grid:isFree(ix, iy)
 end
 
+function Room:upgradeTowers()
+  for _,t in ipairs(self.towers) do
+    t:lvlup()
+  end
+end
+
+
 function Room:update(dt)
   if self.isPaused then
     return

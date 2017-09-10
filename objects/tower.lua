@@ -3,6 +3,7 @@ Tower = Object:extend()
 
 
 function Tower:new(x, y, params)
+  self.isUpgrading = false
   self.isPaused = true
   self.lvl = 1
   
@@ -15,12 +16,14 @@ function Tower:new(x, y, params)
 end
 
 function Tower:lvlup()
-  if not self.isPaused then    
+  if not self.isPaused then
+    self.isUpgrading = true
     self:stop()
-    Gimer:after(5, function()
+    Gtimer:after(5, function()
         self:start()
         self.lvl = self.lvl+1
         self.upgrade(self)
+        self.isUpgrading = false
         end)
   end
   
@@ -41,7 +44,11 @@ function Tower:stop()
 end
 
 function Tower:draw()
-  love.graphics.setColor(unpack(self.color))
+  if self.isUpgrading then
+    love.graphics.setColor(120, 120, 120)
+  else
+    love.graphics.setColor(unpack(self.color))
+  end
   love.graphics.draw(assets[self.imgname], self.x, self.y, 0, 1./64)
 end
 

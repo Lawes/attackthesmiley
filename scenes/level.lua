@@ -38,6 +38,8 @@ end
 function level:keypressed(key)
   if key == 'space' then
     self.room:togglePause()
+  elseif key == 'u' then
+    self.room:upgradeTowers()
   end
   
 end
