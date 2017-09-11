@@ -13,7 +13,12 @@ function GameStats:new()
     self.smileyInGame[t] = 0
     self.huntingTable[t] = 0
   end
-  
+  self.bufferDmg = 0
+  self.effectiveDps = 0
+  Gtimer:every(3, function() 
+      self.effectiveDps = self.bufferDmg/3.
+      self.bufferDmg = 0.0
+      end)
   
 end
 
@@ -31,6 +36,7 @@ end
 
 function GameStats:lessPV(dmg)
   self.totalpv = self.totalpv - dmg
+  self.bufferDmg = self.bufferDmg + dmg
 end
 
 function GameStats:registerSignals()
@@ -52,10 +58,11 @@ end
 function GameStats:draw()  
   love.graphics.setColor(200,200,200)
   love.graphics.print("Cash: "..tostring(self.playercash), 10, 50)
-  love.graphics.print("Pvin Game: "..tostring(math.floor(self.totalpv)), 10, 70) 
+  love.graphics.print("Pvin Game: "..tostring(math.floor(self.totalpv)), 10, 65)
+  love.graphics.print('Effective DPS: '..tostring(math.floor(self.effectiveDps)), 10, 80)
   local i=1
   for name, c in pairs(self.smileyInGame) do
-    love.graphics.print(name..' : '..tostring(c), 10, 70+i*15)
+    love.graphics.print(name..' : '..tostring(c), 10, 90+i*15)
     i = i+1
   end
   

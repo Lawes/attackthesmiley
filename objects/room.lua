@@ -149,6 +149,31 @@ function Room:upgradeTowers()
   end
 end
 
+function Room:getCellInfo(ix, iy)
+  local info = {txt={}}
+  
+  if self.grid.data[ix][iy] == -2 then
+    for _,t in ipairs(self.towers) do
+      if (t.x == ix) and (t.y == iy) then
+        table.insert(info.txt, t:getTxtParams())
+      end
+    end
+  elseif self.grid.data[ix][iy] == -1 then
+    info['wall'] = true
+  end
+  local indices = self.ia:getCacheBody(ix, iy)
+  for _,ie in ipairs(indices) do
+    print(ie)
+    local e = self.EM:get(ie)
+    table.insert(info.txt, 
+      string.format('Smiley: %s, Lvl: %d, PV: %d, Speed: %.1f', e.type, e.lvl, e.life, e.speed))
+  end
+  
+  
+  return info
+  
+end
+
 
 function Room:update(dt)
   if self.isPaused then

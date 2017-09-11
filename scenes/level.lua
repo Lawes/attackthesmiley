@@ -24,6 +24,7 @@ end
 
 function level:enter()
   self.ui_select=nil
+  self.ui_info = nil
   
   self.room = Room(40, 200, 700, 500)
   attachTowerToRoom(self.room)
@@ -49,14 +50,20 @@ function level:mousemoved( x, y, dx, dy, istouch)
 end
 
 function level:mousepressed(x, y, button, istouch)
-  if suit.mouseInRect(self.room.offset.x, self.room.offset.y, self.room.size.x, self.room.size.y)
-     and button == 1 then
+  self.ui_info = nil
+  if suit.mouseInRect(self.room.offset.x, self.room.offset.y, self.room.size.x, self.room.size.y) then
     local ix, iy = self.room:xy2cell(x,y)
-	if self.room:isFree(ix, iy) then
-	  print('build',self.ui_select)
-	  self.room:putBuilding(ix, iy, self.ui_select or 'Wall')
-      self.room:updateIA()  
-	end
+    if button == 1 then
+
+      if self.room:isFree(ix, iy) then
+        print('build',self.ui_select)
+        self.room:putBuilding(ix, iy, self.ui_select or 'Wall')
+          self.room:updateIA()  
+      end
+    elseif button == 2 then
+      self.ui_info = self.room:getCellInfo(ix, iy) 
+    end
+
   end
   
 end
@@ -122,6 +129,20 @@ function level:draw()
   if self.plot_select then
     self.room:addtodraw(self.plot_select)
   end
+  if self.ui_info then
+    if self.ui_info.wall then
+      love.graphics.print("Wall", 200, 10)
+    else
+      local ny = 15
+      for _,txt in ipairs(self.ui_info.txt) do
+        love.graphics.print( txt, 200, ny)
+        ny = ny + 15
+      end
+    end
+    
+    
+  end
+  
   self.room:draw()  
 
 	

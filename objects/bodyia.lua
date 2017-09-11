@@ -77,6 +77,10 @@ function BodyIA:getMaxDensity(x, y, d)
 end
 
 
+function BodyIA:getCacheBody(ix, iy)
+  return self.body[ix][iy]
+end
+
 
 function BodyIA:setBody(allbody)
   self:clearBodyCache()

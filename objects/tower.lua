@@ -11,9 +11,28 @@ function Tower:new(x, y, params)
   for k,v in pairs(params) do
     self[k] = v
   end
+
   self.shotAction = nil
 
 end
+
+function Tower:getTxtParams()
+  local txt='Tower: '..self.type
+  if self.type == 'Freezer' then
+    txt = txt..string.format(', Freeze %d%%', self.speedReduction)
+  elseif self.type == 'Laser' then
+    txt = txt..string.format(', Dps %d', self.dps)
+  else
+    txt = txt..string.format(', Dps %d', self.dmg/self.reload)
+  end
+  
+  if self.radiusEffect then
+    txt = txt..", explosion: "..tostring(self.radiusEffect)
+  end
+  return txt
+
+end
+
 
 function Tower:lvlup()
   if not self.isPaused then
