@@ -28,7 +28,12 @@ function FreezeBomb:update(dt)
   end
 end
 
+local atan2, pi = math.atan2, math.pi
 function FreezeBomb:draw()
-  love.graphics.setColor(0, 10, 255)
-  love.graphics.circle('fill', self.x, self.y, 0.6)
+  love.graphics.setColor(255, 255, 255)
+  -- love.graphics.circle('fill', self.x, self.y, 0.8)
+  love.graphics.draw(assets.freezebomb, self.x, self.y, 
+                     atan2(self.cible.y - self.y, self.cible.x - self.x)+pi/2,
+                     1/64, 1/64,
+                     32, 32)
 end

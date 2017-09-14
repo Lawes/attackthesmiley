@@ -128,7 +128,7 @@ function Crusher:shot()
   local ciblexy = self.getCible(self.x, self.y)
   if ciblexy then
     Signal.emit('missile.explosion', ciblexy, self.radiusEffect, self.dmg)
-    Signal.emit('missile.add', Explosion(ciblexy, self.radiusEffect, 0.1))
+    Signal.emit('missile.add', ReaperExplosion(ciblexy, self.radiusEffect, 0.5))
   end
 end
 
