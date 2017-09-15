@@ -23,7 +23,7 @@ end
 function Explosion:draw()
   love.graphics.setLineWidth(0.1)
   love.graphics.setColor(200,30,30)
-  love.graphics.circle('line', self.x, self.y, self.radius)
+  --love.graphics.circle('line', self.x, self.y, self.radius)
 end
   
   

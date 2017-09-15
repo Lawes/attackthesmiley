@@ -41,7 +41,15 @@ function Room:new(x, y, w, h)
         e:freeze(ratio)
       end
     end
-  )    
+  )
+  psmfreeze = love.graphics.newParticleSystem(assets.snow, 200)
+  psmfreeze:setParticleLifetime(0.5,1.5)
+  psmfreeze:setAreaSpread('uniform', 0.5, 0.5)
+  psmfreeze:setOffset(32, 32)
+  psmfreeze:setLinearAcceleration(-1, -1, 1, 1)
+  psmfreeze:setSizes(1/90, 1/50)
+  psmfreeze:setColors(255, 255, 255, 255, 255, 255, 255, 128)
+  psmfreeze:start()
   
   
 end
@@ -190,7 +198,7 @@ function Room:update(dt)
 
   self.MM:update(dt)
   self.EM:update(dt, self.grid, self.ia)
-  
+  psmfreeze:update(dt)
   
   for _,s in pairs(self.spawners) do
     s:update(dt)
@@ -255,8 +263,10 @@ function Room:draw()
   end
   
   self.EM:draw()
-  self.MM:draw()
+  love.graphics.draw(psmfreeze)
   
+  self.MM:draw()
+
   self.ia:draw()
   
   if self.todraw then

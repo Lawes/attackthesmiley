@@ -29,9 +29,19 @@ function Enemy:new(name, lvl)
   self.isDead = false
   
   self.freezeratio = 0
+  self.sizeFactor = 1
   
   self:resetForce()
   self:static()
+  
+  Gtimer:every(1.2, function()
+      Gtimer:tween(0.5, self, {sizeFactor=0.5}, 'out-linear',
+        function()
+          Gtimer:tween(0.5, self, {sizeFactor=1.0}, 'in-quad')
+        end)
+      end)
+      
+  
 end
 
 function Enemy:hit(dmg)
@@ -120,23 +130,21 @@ end
 function Enemy:draw()
   local r = 0.15*(1+self.lvl)
   local lvlcolor
-  local rb = r*1.2
-  
+  local rb = r*1.2*self.sizeFactor
+
+  if self.freezeratio > 0 then
+    lvlcolor=(255-40*self.lvl)*self.sizeFactor
+    love.graphics.setColor(10, lvlcolor, lvlcolor)
+  else
+    lvlcolor=(255-80*self.lvl)*self.sizeFactor
+    love.graphics.setColor(lvlcolor, lvlcolor, lvlcolor)
+  end
+  love.graphics.draw(assets.smiley_border, self.x-rb, self.y-rb, 0, 2*rb/32) 
+
   if self.isMarked then
     love.graphics.setColor(100, 100, 100)
   else
     love.graphics.setColor(255, 255, 255)
   end
   love.graphics.draw(assets[self.type], self.x-r, self.y-r, 0, 2*r/64)
-
-  if self.freezeratio > 0 then
-    lvlcolor=255-40*self.lvl
-    love.graphics.setColor(10, lvlcolor, lvlcolor)
-  else
-    lvlcolor=255-70*self.lvl
-    love.graphics.setColor(lvlcolor, lvlcolor, lvlcolor)
-  end
-  love.graphics.draw(assets.smiley_border, self.x-rb, self.y-rb, 0, 2*rb/32) 
-
-
 end

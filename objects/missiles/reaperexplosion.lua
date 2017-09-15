@@ -2,12 +2,12 @@ ReaperExplosion = Explosion:extend()
 
 function ReaperExplosion:new(pos, radius, lifetime)
     ReaperExplosion.super.new(self, pos, radius, lifetime)
-    self.spin = 0
-    Gtimer:tween(.5, self, {spin=2*math.pi}, 'in-linear')
-    self.radius = radius/2
+    self.spin = math.random()
+    Gtimer:tween(.5, self, {spin=2*math.pi+self.spin}, 'in-linear')
+    self.radius = radius/5
     Gtimer:tween(0.3, self, {radius=radius}, 'out-expo', 
       function()
-        Gtimer:tween(0.2, self, {radius=radius/2}, 'in-expo')
+        Gtimer:tween(0.2, self, {radius=radius/5}, 'in-expo')
       end
       )
 end
