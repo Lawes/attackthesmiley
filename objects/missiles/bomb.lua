@@ -20,7 +20,7 @@ function Bomb:update(dt)
   if d2 < 0.1 then
     self:dead()
     Signal.emit('missile.explosion', self.cible, self.explosionRadius, self.dmg)
-    Signal.emit('missile.add', NukExplosion(self.cible, self.explosionRadius))
+    Signal.emit('missile.add', NukExplosion(self.cible, self.explosionRadius, 1))
   else
     local dirx, diry = vector.normalize(dx, dy)
     self.x = self.x + Bomb.v*dirx*dt

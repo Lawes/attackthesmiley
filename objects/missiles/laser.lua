@@ -32,7 +32,8 @@ end
 
 
 function Laser:draw()
-  love.graphics.setColor(255, 165, 0)
-  love.graphics.setLineWidth(1)
-  love.graphics.line(self.x, self.y, self.cible.x, self.cible.y)
+  love.graphics.setColor(255, 255, 255)
+  local a, d = vector.toPolar(-self.x+ self.cible.x, -self.y+self.cible.y)
+  love.graphics.draw(assets.rayon, self.x, self.y, a, d/32, 1/16, 0, 16)
+  love.graphics.draw(assets.point, self.cible.x, self.cible.y, 0, 1/90, 1/90, 32, 32)  
 end

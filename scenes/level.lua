@@ -53,13 +53,18 @@ function level:mousepressed(x, y, button, istouch)
   self.ui_info = nil
   if suit.mouseInRect(self.room.offset.x, self.room.offset.y, self.room.size.x, self.room.size.y) then
     local ix, iy = self.room:xy2cell(x,y)
-    if button == 1 then
-
-      if self.room:isFree(ix, iy) then
-        print('build',self.ui_select)
-        self.room:putBuilding(ix, iy, self.ui_select or 'Wall')
-          self.room:updateIA()  
+    if button == 1 and self.ui_select then
+      if self.ui_select == 'remove' then
+        self.room:freeCell(ix, iy)
+        self.room:updateIA()
+      else
+        if self.room:isFree(ix, iy) then
+          print('build',self.ui_select)
+          self.room:putBuilding(ix, iy, self.ui_select or 'Wall')
+            self.room:updateIA()  
+        end
       end
+
     elseif button == 2 then
       self.ui_info = self.room:getCellInfo(ix, iy) 
     end
@@ -83,7 +88,10 @@ function level:update(dt)
   suit.layout:reset(40, 730)
   suit.layout:padding(10)
   if suit.Button('reset', suit.layout:row(100,30)).hit then
-	self.ui_select=nil
+    self.ui_select=nil
+  end
+  if suit.Button('remove', suit.layout:col(100,30)).hit then
+    self.ui_select='remove'
   end
   
   local handles = {}
@@ -102,23 +110,27 @@ function level:update(dt)
       print('hit',k)
     end
   end
-  
-  
-  
+
   self.room:update(dt)
   
   if suit.mouseInRect(self.room.offset.x, self.room.offset.y, self.room.size.x, self.room.size.y) then
     if self.ui_select then
-	
       local ix, iy = self.room:xy2cell(love.mouse.getPosition())
-      local color = {0,255,0}
-      if self.room:isFree(ix, iy) then
-        color = {0,0,255}
+      local color, img
+      if self.ui_select == 'remove' then
+        color = {255,255,255}
+        img = assets.cross
+      else
+        color = {0,255,0}
+        img=assets[G.tower[self.ui_select].imgname]
+        if self.room:isFree(ix, iy) then
+          color = {0,0,255}
+        end
       end
-      self.plot_select = {img=assets[G.tower[self.ui_select].imgname], x=ix, y=iy, color=color}
+      self.plot_select = {img=img, x=ix, y=iy, color=color}
     end
   else
-	self.plot_select = nil
+    self.plot_select = nil
   end
   
 end

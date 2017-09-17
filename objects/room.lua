@@ -147,6 +147,17 @@ function Room:getGrid()
   return self.grid
 end
 
+function Room:freeCell(ix, iy)
+  self.grid:free(ix, iy)
+  for i=#self.towers,1,-1 do
+    local t = self.towers[i]
+    if t.x == ix and t.y == iy then
+      t:stop()
+      table.remove(self.towers, i)
+    end
+  end
+end
+
 function Room:isFree(ix, iy)
   return (self.ia:howMany(ix, iy) == 0) and self.grid:isFree(ix, iy)
 end

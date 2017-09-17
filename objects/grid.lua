@@ -47,6 +47,10 @@ function Grid:isFree(ix, iy)
   return self.data[ix][iy] == 0
 end
 
+function Grid:free(ix, iy)
+  self.data[ix][iy] = 0
+end
+
 function Grid:toggle_set(x, y, val)
   local ix, iy, v=floor(x), floor(y), val
   if self.data[ix][iy] ~=0 then
