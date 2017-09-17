@@ -35,7 +35,7 @@ function Enemy:new(name, lvl)
   self:static()
   
   Gtimer:every(1.2, function()
-      Gtimer:tween(0.5, self, {sizeFactor=0.5}, 'out-linear',
+      Gtimer:tween(0.5, self, {sizeFactor=0.85}, 'out-linear',
         function()
           Gtimer:tween(0.5, self, {sizeFactor=1.0}, 'in-quad')
         end)
