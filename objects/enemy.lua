@@ -16,6 +16,8 @@ function Enemy:new(name, lvl)
       plvl = plvl -1
     end
   end
+  
+  self.maxlife = self.life
 
   self.x = 0
   self.y = 0
@@ -55,6 +57,11 @@ function Enemy:hit(dmg)
                   Enemy(self.type, self.lvl-1):setPos(self.x, self.y))
       Signal.emit("smiley.add", 
                   Enemy(self.type, self.lvl-1):setPos(self.x, self.y))
+      psm.spliting:setPosition(self.x, self.y)
+      psm.spliting:emit(3)
+      Gtimer:after(0.1, function() 
+          psm.spliting:setPosition(self.x, self.y)
+          psm.spliting:emit(2) end)
     end
   else
     self.life = dpv
@@ -126,17 +133,17 @@ function Enemy:freeze(s)
   end
 end
 
-
+local max=math.max
 function Enemy:draw()
   local r = 0.15*(1+self.lvl)
   local lvlcolor
   local rb = r*1.2*self.sizeFactor
 
   if self.freezeratio > 0 then
-    lvlcolor=(255-40*self.lvl)*self.sizeFactor
+    lvlcolor=max((255-40*self.lvl)*self.sizeFactor,0)
     love.graphics.setColor(10, lvlcolor, lvlcolor)
   else
-    lvlcolor=(255-80*self.lvl)*self.sizeFactor
+    lvlcolor=max((255-80*self.lvl)*self.sizeFactor,0)
     love.graphics.setColor(lvlcolor, lvlcolor, lvlcolor)
   end
   love.graphics.draw(assets.smiley_border, self.x-rb, self.y-rb, 0, 2*rb/32) 
@@ -147,4 +154,9 @@ function Enemy:draw()
     love.graphics.setColor(255, 255, 255)
   end
   love.graphics.draw(assets[self.type], self.x-r, self.y-r, 0, 2*r/64)
+  love.graphics.setLineWidth(0.1)
+  love.graphics.setColor(255, 0, 0)
+  love.graphics.line(self.x-r, self.y-r, self.x+r, self.y-r)
+  love.graphics.setColor(0, 255, 0)
+  love.graphics.line(self.x-r, self.y-r, self.x-r + self.life/self.maxlife*2*r, self.y-r)
 end

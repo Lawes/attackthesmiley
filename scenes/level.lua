@@ -51,24 +51,29 @@ end
 
 function level:mousepressed(x, y, button, istouch)
   self.ui_info = nil
-  if suit.mouseInRect(self.room.offset.x, self.room.offset.y, self.room.size.x, self.room.size.y) then
+  if button == 2 then
+    self.ui_select = nil
+    self.plot_select = nil
+  elseif suit.mouseInRect(self.room.offset.x, 
+                          self.room.offset.y,
+                          self.room.size.x,
+                          self.room.size.y) 
+         and button == 1 then
+           
     local ix, iy = self.room:xy2cell(x,y)
-    if button == 1 and self.ui_select then
-      if self.ui_select == 'remove' then
-        self.room:freeCell(ix, iy)
-        self.room:updateIA()
-      else
-        if self.room:isFree(ix, iy) then
-          print('build',self.ui_select)
-          self.room:putBuilding(ix, iy, self.ui_select or 'Wall')
-            self.room:updateIA()  
-        end
-      end
-
-    elseif button == 2 then
+    if not self.ui_select then
       self.ui_info = self.room:getCellInfo(ix, iy) 
+    elseif self.ui_select == 'remove' then
+      self.room:freeCell(ix, iy)
+      self.room:updateIA()
+    else
+      if self.room:isFree(ix, iy) then
+        print('build',self.ui_select)
+        self.room:putBuilding(ix, iy, self.ui_select or 'Wall')
+          self.room:updateIA()  
+      end
     end
-
+    
   end
   
 end
@@ -87,10 +92,8 @@ function level:update(dt)
   love.graphics.setColor(255,255,255)
   suit.layout:reset(40, 730)
   suit.layout:padding(10)
-  if suit.Button('reset', suit.layout:row(100,30)).hit then
-    self.ui_select=nil
-  end
-  if suit.Button('remove', suit.layout:col(100,30)).hit then
+
+  if suit.Button('remove', suit.layout:row(100,30)).hit then
     self.ui_select='remove'
   end
   

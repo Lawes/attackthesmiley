@@ -42,15 +42,27 @@ function Room:new(x, y, w, h)
       end
     end
   )
-  psmfreeze = love.graphics.newParticleSystem(assets.snow, 200)
-  psmfreeze:setParticleLifetime(0.5,1.5)
-  psmfreeze:setAreaSpread('uniform', 0.5, 0.5)
-  psmfreeze:setOffset(32, 32)
-  psmfreeze:setLinearAcceleration(-1, -1, 1, 1)
-  psmfreeze:setSizes(1/90, 1/50)
-  psmfreeze:setColors(255, 255, 255, 255, 255, 255, 255, 128)
-  psmfreeze:start()
+  psm = {}
+  psm.freeze = love.graphics.newParticleSystem(assets.snow, 200)
+  psm.freeze:setParticleLifetime(0.5,1.5)
+  psm.freeze:setAreaSpread('uniform', 0.5, 0.5)
+  psm.freeze:setOffset(32, 32)
+  psm.freeze:setRotation(0, math.pi)
+  psm.freeze:setSpinVariation(0.3)
+  psm.freeze:setLinearAcceleration(-1, -1, 1, 1)
+  psm.freeze:setSizes(1/90, 1/50)
+  psm.freeze:setColors(255, 255, 255, 255, 255, 255, 255, 128)
+  psm.freeze:start()
   
+  psm.spliting = love.graphics.newParticleSystem(assets.split, 400)
+  psm.spliting:setParticleLifetime(0.5,0.8)
+  psm.spliting:setAreaSpread('uniform', 0.1, 0.1)
+  psm.spliting:setOffset(32, 32)  
+  psm.spliting:setSizes(0, 1/32)
+  psm.spliting:setColors(255, 255, 255, 150, 255, 255, 255, 50)
+  psm.spliting:setRotation(0, math.pi)
+  psm.freeze:setSpinVariation(1.0)
+  psm.spliting:start() 
   
 end
 
@@ -85,7 +97,7 @@ function Room:fromConfig(lvl)
     s:togglePause()
     table.insert(self.spawners, s)
   end
-  local ws = WaveSpawner(1,1,1,17, G.wave.wave)
+  local ws = WaveSpawner(1,1,1,18, G.wave.wave)
   ws:togglePause()
   table.insert(self.spawners, ws)
 
@@ -209,9 +221,12 @@ function Room:update(dt)
 
   self.MM:update(dt)
   self.EM:update(dt, self.grid, self.ia)
-  psmfreeze:update(dt)
+  for _,ps in pairs(psm) do
+    ps:update(dt)
+  end
   
-  for _,s in pairs(self.spawners) do
+  
+  for _,s in ipairs(self.spawners) do
     s:update(dt)
     repeat
       local e = s:createEnemy(G.smiley[Lume.randomchoice(self.allsmiley)])
@@ -265,16 +280,19 @@ function Room:draw()
 	end
 
   
-  for _,s in pairs(self.spawners) do
+  for _,s in ipairs(self.spawners) do
     s:draw()
   end
   
-  for _,t in pairs(self.towers) do
+  for _,t in ipairs(self.towers) do
     t:draw()
   end
   
   self.EM:draw()
-  love.graphics.draw(psmfreeze)
+  for _,ps in pairs(psm) do
+    love.graphics.setColor(255,255,255)
+    love.graphics.draw(ps)
+  end
   
   self.MM:draw()
 
