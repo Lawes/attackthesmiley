@@ -60,6 +60,7 @@ function WaveSpawner:new(x, y, w, h, wavecfg)
   self.all = genListToCreate(wavecfg.smiley)
   self.rate = wavecfg.rate
   self.isPaused = true
+  self.isNew = true
   
   self:reload()
   
@@ -70,6 +71,7 @@ function WaveSpawner:reload()
   self.wave = Lume.shuffle(self.all)
   self.toCreate = 0.0
   self.isFinished = false  
+  self.isNew = true
 end
 
 
@@ -78,7 +80,10 @@ function WaveSpawner:togglePause()
 end
 
 function WaveSpawner:update(dt)
-  if not self.isPaused and not self.isFinished then self.toCreate = self.toCreate + dt*self.rate end
+  if not self.isPaused and not self.isFinished then 
+    self.isNew = false
+    self.toCreate = self.toCreate + dt*self.rate 
+  end
 end
 
 function WaveSpawner:createEnemy()
