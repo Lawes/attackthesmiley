@@ -62,7 +62,8 @@ function GameStats:draw()
   love.graphics.print('Effective DPS: '..tostring(math.floor(self.effectiveDps)), 10, 80)
   local i=1
   for name, c in pairs(self.smileyInGame) do
-    love.graphics.print(name..' : '..tostring(c), 200, 10+i*15)
+    love.graphics.draw(assets[name], 200, 10+i*15, 0, 15/64)
+    love.graphics.print(' : '..tostring(c), 220, 10+i*15)
     i = i+1
   end
   
