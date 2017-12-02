@@ -227,8 +227,13 @@ function Room:update(dt)
   
   
   for _,s in ipairs(self.spawners) do
+    if s.isNew then
+      print('load!!')
+      GS:newWave(s.wave)
+    end
+
     s:update(dt)
-   
+    
     repeat
       local e = s:createEnemy(G.smiley[Lume.randomchoice(self.allsmiley)])
       if e then
