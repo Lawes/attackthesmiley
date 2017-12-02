@@ -64,8 +64,6 @@ function Room:new(x, y, w, h)
   psm.freeze:setSpinVariation(1.0)
   psm.spliting:start() 
   
-  self.xspawner = SpawnerPanel(10, 110, 600, 50)
-  
 end
 
 function Room:togglePause()
@@ -229,13 +227,8 @@ function Room:update(dt)
   
   
   for _,s in ipairs(self.spawners) do
-    if s.isNew then
-      print('load!!')
-      self.xspawner:loadwave(s.wave, s.rate)
-    end
-    self.xspawner:update(dt)
     s:update(dt)
-    
+   
     repeat
       local e = s:createEnemy(G.smiley[Lume.randomchoice(self.allsmiley)])
       if e then
@@ -316,7 +309,5 @@ function Room:draw()
   -- self.tower:draw()
   
   love.graphics.pop()
-  
-  self.xspawner:draw()
  
 end
