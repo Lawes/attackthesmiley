@@ -137,16 +137,16 @@ local max=math.max
 function Enemy:draw()
   local r = 0.15*(1+self.lvl)
   local lvlcolor
-  local rb = r*1.2*self.sizeFactor
+  local rb = r*1.8*self.sizeFactor
 
   if self.freezeratio > 0 then
     lvlcolor=max((255-40*self.lvl)*self.sizeFactor,0)
     love.graphics.setColor(10, lvlcolor, lvlcolor)
   else
     lvlcolor=max((255-80*self.lvl)*self.sizeFactor,0)
-    love.graphics.setColor(lvlcolor, lvlcolor, lvlcolor)
+    love.graphics.setColor(unpack(self.color))
   end
-  love.graphics.draw(assets.smiley_border, self.x-rb, self.y-rb, 0, 2*rb/32) 
+  love.graphics.draw(assets['b'..tostring(self.lvl)], self.x-rb, self.y-rb, 0, 2*rb/64) 
 
   if self.isMarked then
     love.graphics.setColor(100, 100, 100)
